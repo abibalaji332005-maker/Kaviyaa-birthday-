@@ -1,0 +1,2731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>For Kaviya — A Quiet Sky for Your Birthday</title>
+
+  <!-- Google Fonts: Cormorant Garamond, Plus Jakarta Sans, Caveat -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ==========================================================================
+       DESIGN TOKENS & BASE RESET
+       ========================================================================== */
+    :root {
+      --bg-obsidian: #05060b;
+      --bg-deep: #0a0c15;
+      --gold-light: #f5c27b;
+      --gold-warm: #d49a56;
+      --gold-deep: #9c5b2b;
+      --text-main: #f4ece3;
+      --text-soft: #d9c8b8;
+      --text-muted: #9e8f84;
+      --glass-bg: rgba(12, 13, 21, 0.66);
+      --glass-border: rgba(245, 194, 123, 0.22);
+      --glass-border-hover: rgba(245, 194, 123, 0.5);
+      --font-serif: 'Cormorant Garamond', Georgia, serif;
+      --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-hand: 'Caveat', cursive;
+      --radius-lg: 24px;
+      --radius-md: 16px;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background-color: var(--bg-obsidian);
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      font-family: var(--font-sans);
+      color: var(--text-main);
+      background: linear-gradient(180deg, #05060b 0%, #090b14 55%, #151014 84%, #201413 100%);
+      background-attachment: fixed;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    ::selection {
+      background: rgba(212, 154, 86, 0.32);
+      color: #fff5e6;
+    }
+
+    button, input, textarea {
+      font-family: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    /* ==========================================================================
+       FIXED BACKGROUND CANVASES & CINEMATIC HORIZON LAYER
+       ========================================================================== */
+    #sky-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    #fx-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 70;
+      pointer-events: none;
+    }
+
+    .horizon-layer {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .horizon-amber-glow {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 36vh;
+      background: radial-gradient(
+        ellipse 92% 68% at 50% 100%,
+        rgba(196, 108, 56, 0.42) 0%,
+        rgba(146, 74, 42, 0.22) 38%,
+        rgba(28, 19, 20, 0.08) 72%,
+        transparent 100%
+      );
+    }
+
+    @keyframes cloudDriftA {
+      0%, 100% { transform: translateX(-5%); }
+      50% { transform: translateX(5%); }
+    }
+
+    @keyframes cloudDriftB {
+      0%, 100% { transform: translateX(4%); }
+      50% { transform: translateX(-4%); }
+    }
+
+    .cloud-band-1 {
+      position: absolute;
+      bottom: 9vh;
+      left: -12%;
+      width: 124%;
+      height: 18vh;
+      background:
+        radial-gradient(ellipse 26% 36% at 22% 60%, rgba(204, 130, 86, 0.16) 0%, transparent 72%),
+        radial-gradient(ellipse 30% 42% at 54% 48%, rgba(176, 114, 82, 0.13) 0%, transparent 74%),
+        radial-gradient(ellipse 24% 34% at 82% 65%, rgba(181, 101, 61, 0.14) 0%, transparent 70%);
+      filter: blur(18px);
+      animation: cloudDriftA 46s ease-in-out infinite;
+    }
+
+    .cloud-band-2 {
+      position: absolute;
+      bottom: 4vh;
+      left: -10%;
+      width: 120%;
+      height: 14vh;
+      background:
+        radial-gradient(ellipse 28% 35% at 32% 55%, rgba(217, 138, 78, 0.14) 0%, transparent 70%),
+        radial-gradient(ellipse 34% 38% at 70% 58%, rgba(181, 101, 61, 0.15) 0%, transparent 72%);
+      filter: blur(14px);
+      animation: cloudDriftB 38s ease-in-out infinite;
+    }
+
+    .horizon-mountains {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 16vh;
+      min-height: 92px;
+      display: block;
+    }
+
+    .horizon-foliage {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: clamp(160px, 28vw, 290px);
+      height: auto;
+      opacity: 0.96;
+    }
+
+    @keyframes townTwinkle {
+      0%, 100% { opacity: 0.35; }
+      50% { opacity: 0.95; }
+    }
+
+    .town-light {
+      animation: townTwinkle var(--tw-dur, 3.6s) ease-in-out infinite;
+      animation-delay: var(--tw-delay, 0s);
+    }
+
+    /* ==========================================================================
+       LAYOUT UTILITIES & SMOKED-GLASS SURFACES
+       ========================================================================== */
+    main {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+    }
+
+    .section-wrap {
+      width: 100%;
+      max-width: 1020px;
+      margin: 0 auto;
+      padding: 72px 18px;
+    }
+
+    .section-wrap-narrow {
+      max-width: 740px;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 38px;
+    }
+
+    .eyebrow {
+      font-size: 11px;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: rgba(245, 194, 123, 0.78);
+      font-weight: 500;
+      margin: 0 0 10px;
+    }
+
+    .section-title {
+      font-family: var(--font-serif);
+      font-size: clamp(2rem, 5.5vw, 3.1rem);
+      font-weight: 500;
+      line-height: 1.12;
+      color: #fdf3e7;
+      margin: 0;
+    }
+
+    .section-subtitle {
+      margin: 12px auto 0;
+      max-width: 540px;
+      font-size: 0.92rem;
+      line-height: 1.65;
+      color: var(--text-soft);
+      font-weight: 300;
+    }
+
+    .smoked-glass {
+      background: var(--glass-bg);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 18px 46px rgba(2, 3, 8, 0.65), inset 0 1px 0 rgba(255, 228, 196, 0.06);
+      transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+    }
+
+    .smoked-glass-hover:hover {
+      border-color: var(--glass-border-hover);
+      box-shadow: 0 22px 52px rgba(2, 3, 8, 0.75), 0 0 28px rgba(212, 154, 86, 0.14);
+    }
+
+    .hint-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 16px;
+      padding: 7px 16px;
+      border-radius: 999px;
+      background: rgba(12, 13, 21, 0.72);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(245, 194, 123, 0.26);
+      color: rgba(245, 194, 123, 0.94);
+      font-size: 0.78rem;
+      line-height: 1.35;
+      box-shadow: 0 6px 22px rgba(0, 0, 0, 0.45);
+      animation: softPulse 3.6s ease-in-out infinite;
+    }
+
+    @keyframes softPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(212, 154, 86, 0.2); }
+      50% { box-shadow: 0 0 18px 2px rgba(212, 154, 86, 0.2); }
+    }
+
+    .btn-gold {
+      border: none;
+      border-radius: 999px;
+      padding: 12px 24px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: #160e0a;
+      background: linear-gradient(95deg, #f8d7a3 0%, #f5c27b 45%, #d49a56 100%);
+      box-shadow: 0 0 24px rgba(212, 154, 86, 0.32);
+      transition: filter 0.2s ease, transform 0.2s ease;
+    }
+
+    .btn-gold:hover { filter: brightness(1.06); }
+    .btn-gold:active { transform: scale(0.97); }
+
+    .btn-ghost {
+      border-radius: 999px;
+      padding: 9px 18px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--gold-light);
+      background: rgba(245, 194, 123, 0.1);
+      border: 1px solid rgba(245, 194, 123, 0.32);
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+
+    .btn-ghost:hover { background: rgba(245, 194, 123, 0.2); }
+    .btn-ghost:active { transform: scale(0.97); }
+
+    .hidden { display: none !important; }
+
+    /* ==========================================================================
+       TOP-RIGHT CHIMES TOGGLE
+       ========================================================================== */
+    .chimes-wrap {
+      position: fixed;
+      top: max(14px, env(safe-area-inset-top));
+      right: 14px;
+      z-index: 60;
+    }
+
+    .chimes-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(12, 13, 21, 0.72);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(245, 194, 123, 0.25);
+      color: var(--text-soft);
+      font-size: 0.75rem;
+      font-weight: 500;
+      transition: border-color 0.25s ease, color 0.25s ease, transform 0.2s ease;
+    }
+
+    .chimes-btn:hover {
+      border-color: rgba(245, 194, 123, 0.52);
+      color: var(--gold-light);
+    }
+
+    .chimes-btn:active { transform: scale(0.96); }
+
+    /* ==========================================================================
+       SECTION 1: HERO & 10-STAR CONSTELLATION SKY
+       ========================================================================== */
+    .hero-section {
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 68px 18px 28px;
+    }
+
+    .hero-header {
+      text-align: center;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    .hero-title {
+      font-family: var(--font-serif);
+      font-size: clamp(2.5rem, 8vw, 4.4rem);
+      font-weight: 500;
+      line-height: 1.06;
+      margin: 0;
+      background: linear-gradient(180deg, #fff8ee 0%, #f5cfa0 58%, #d49a56 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      filter: drop-shadow(0 4px 24px rgba(212, 154, 86, 0.22));
+    }
+
+    .progress-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 14px;
+      padding: 6px 16px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      color: var(--text-soft);
+    }
+
+    .progress-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--gold-light);
+      box-shadow: 0 0 8px var(--gold-light);
+    }
+
+    .constellation-arena {
+      position: relative;
+      width: 100%;
+      max-width: 900px;
+      height: 46vh;
+      min-height: 330px;
+      max-height: 490px;
+      margin: 20px auto;
+      border-radius: 26px;
+      border: 1px solid rgba(245, 194, 123, 0.12);
+      background: rgba(7, 8, 15, 0.22);
+      overflow: hidden;
+    }
+
+    #constellation-svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    @keyframes starBreathe {
+      0%, 100% {
+        transform: translate(-50%, -50%) scale(1);
+        filter: drop-shadow(0 0 6px rgba(245, 194, 123, 0.78)) drop-shadow(0 0 16px rgba(212, 154, 86, 0.35));
+      }
+      50% {
+        transform: translate(-50%, -50%) scale(1.15);
+        filter: drop-shadow(0 0 12px rgba(255, 224, 178, 1)) drop-shadow(0 0 26px rgba(212, 154, 86, 0.65));
+      }
+    }
+
+    .constellation-star {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      width: 52px;
+      height: 52px;
+      padding: 0;
+      border: none;
+      background: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 15;
+      animation: starBreathe var(--dur, 3.8s) ease-in-out infinite;
+      animation-delay: var(--delay, 0s);
+    }
+
+    .constellation-star.is-lit::before {
+      content: '';
+      position: absolute;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(245, 194, 123, 0.28) 0%, rgba(212, 154, 86, 0.05) 68%, transparent 100%);
+      border: 1px solid rgba(245, 194, 123, 0.55);
+      pointer-events: none;
+    }
+
+    .constellation-star svg {
+      width: 24px;
+      height: 24px;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .constellation-star:hover svg {
+      transform: scale(1.25) rotate(14deg);
+    }
+
+    @keyframes drawLine {
+      from { stroke-dashoffset: 160; opacity: 0; }
+      to { stroke-dashoffset: 0; opacity: 0.58; }
+    }
+
+    .constellation-line {
+      stroke: #f5c27b;
+      stroke-width: 1.05;
+      stroke-dasharray: 160;
+      opacity: 0.58;
+      filter: drop-shadow(0 0 4px rgba(245, 194, 123, 0.55));
+      animation: drawLine 0.9s ease-out forwards;
+    }
+
+    .complete-banner {
+      width: 100%;
+      max-width: 560px;
+      margin: 0 auto 12px;
+      padding: 14px 20px;
+      border-radius: 18px;
+      text-align: center;
+      border-color: rgba(245, 194, 123, 0.45);
+      box-shadow: 0 0 28px rgba(212, 154, 86, 0.2);
+    }
+
+    .complete-banner p {
+      margin: 0;
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: 1.15rem;
+      color: var(--gold-light);
+    }
+
+    .scroll-cue {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.76rem;
+      transition: color 0.25s ease;
+    }
+
+    .scroll-cue:hover { color: var(--gold-light); }
+
+    @keyframes bounceSoft {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(5px); }
+    }
+
+    .scroll-arrow {
+      color: rgba(245, 194, 123, 0.8);
+      animation: bounceSoft 2.1s ease-in-out infinite;
+    }
+
+    /* ==========================================================================
+       SECTION 2: "OPEN WHEN..." CARDS
+       ========================================================================== */
+    .open-when-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 18px;
+    }
+
+    .open-when-card {
+      text-align: left;
+      border-radius: var(--radius-md);
+      padding: 24px;
+      min-height: 158px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      color: inherit;
+    }
+
+    .open-when-card:active { transform: scale(0.985); }
+
+    .open-when-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    .open-when-num {
+      font-size: 0.74rem;
+      letter-spacing: 0.22em;
+      color: rgba(245, 194, 123, 0.76);
+      font-weight: 500;
+    }
+
+    .open-when-status {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      transition: color 0.25s ease;
+    }
+
+    .open-when-card:hover .open-when-status,
+    .open-when-status.opened {
+      color: var(--gold-light);
+    }
+
+    .open-when-title {
+      margin: 18px 0 0;
+      font-family: var(--font-serif);
+      font-size: 1.42rem;
+      font-weight: 500;
+      line-height: 1.28;
+      color: #fdf3e7;
+      transition: color 0.25s ease;
+    }
+
+    .open-when-card:hover .open-when-title { color: var(--gold-light); }
+
+    /* ==========================================================================
+       SECTION 3: "LET IT GO TO THE STARS" WORRY BURNER
+       ========================================================================== */
+    .worry-card {
+      border-radius: var(--radius-lg);
+      padding: clamp(24px, 5vw, 42px);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .worry-input-wrap {
+      position: relative;
+      max-width: 540px;
+      margin: 24px auto 0;
+    }
+
+    .worry-textarea {
+      width: 100%;
+      min-height: 120px;
+      resize: vertical;
+      border-radius: 18px;
+      padding: 16px 18px;
+      background: rgba(8, 9, 16, 0.82);
+      border: 1px solid rgba(245, 194, 123, 0.26);
+      color: #fdf3e7;
+      font-size: 0.94rem;
+      line-height: 1.6;
+      outline: none;
+      transition: border-color 0.25s ease, opacity 0.6s ease, transform 0.6s ease, filter 0.6s ease;
+    }
+
+    .worry-textarea::placeholder { color: rgba(158, 143, 132, 0.72); }
+
+    .worry-textarea:focus {
+      border-color: rgba(245, 194, 123, 0.65);
+      box-shadow: 0 0 0 2px rgba(245, 194, 123, 0.14);
+    }
+
+    .worry-textarea.is-burning {
+      opacity: 0;
+      transform: translateY(-18px) scale(0.96);
+      filter: blur(6px);
+    }
+
+    .worry-actions {
+      margin-top: 18px;
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .worry-feedback {
+      margin: 20px auto 0;
+      max-width: 480px;
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: 1.2rem;
+      line-height: 1.5;
+      color: var(--gold-light);
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+
+    .worry-feedback.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ==========================================================================
+       SECTION 4: WAX-SEALED BIRTHDAY LETTER
+       ========================================================================== */
+    .envelope-container {
+      position: relative;
+      width: 100%;
+      max-width: 390px;
+      height: 240px;
+      margin: 0 auto;
+      perspective: 1100px;
+      cursor: pointer;
+    }
+
+    .envelope-base {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      border-radius: 14px;
+      background: linear-gradient(155deg, #1b171b 0%, #100e14 60%, #161114 100%);
+      border: 1px solid rgba(245, 194, 123, 0.28);
+      box-shadow: 0 24px 55px rgba(0, 0, 0, 0.72), 0 0 36px rgba(181, 101, 61, 0.14);
+      overflow: hidden;
+    }
+
+    .envelope-fold-left,
+    .envelope-fold-right,
+    .envelope-fold-bottom {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .envelope-fold-left {
+      background: linear-gradient(135deg, rgba(245, 194, 123, 0.055) 0%, transparent 50%);
+      clip-path: polygon(0 0, 50% 56%, 0 100%);
+    }
+
+    .envelope-fold-right {
+      background: linear-gradient(225deg, rgba(245, 194, 123, 0.045) 0%, transparent 50%);
+      clip-path: polygon(100% 0, 50% 56%, 100% 100%);
+    }
+
+    .envelope-fold-bottom {
+      background: linear-gradient(0deg, rgba(10, 9, 14, 0.92) 0%, rgba(28, 22, 24, 0.6) 100%);
+      clip-path: polygon(0 100%, 50% 47%, 100% 100%);
+    }
+
+    .envelope-flap {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 58%;
+      background: linear-gradient(180deg, #261e20 0%, #171318 100%);
+      clip-path: polygon(0 0, 100% 0, 50% 100%);
+      transform-origin: top center;
+      transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 4;
+    }
+
+    .envelope-container.is-opened .envelope-flap {
+      transform: rotateX(180deg);
+    }
+
+    .wax-seal-btn {
+      position: absolute;
+      top: 52%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 32% 28%, #ffe7c2 0%, #e69f5c 45%, #9c5227 88%, #6e3517 100%);
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.6), 0 0 22px rgba(212, 154, 86, 0.45), inset 0 2px 4px rgba(255, 244, 224, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 6;
+      transition: transform 0.45s ease, opacity 0.45s ease;
+    }
+
+    .wax-seal-btn span {
+      font-family: var(--font-serif);
+      font-size: 1.65rem;
+      font-weight: 700;
+      color: #3b1c0c;
+    }
+
+    .envelope-container:hover .wax-seal-btn {
+      transform: translate(-50%, -50%) scale(1.07);
+    }
+
+    .envelope-container.is-opened .wax-seal-btn {
+      transform: translate(-50%, -50%) scale(0.35) rotate(-18deg);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .envelope-label {
+      position: absolute;
+      bottom: 14px;
+      inset-inline: 0;
+      text-align: center;
+      font-family: var(--font-hand);
+      font-size: 1.35rem;
+      color: rgba(245, 194, 123, 0.85);
+      pointer-events: none;
+    }
+
+    .letter-parchment {
+      margin-top: 28px;
+      border-radius: 20px;
+      padding: clamp(24px, 5vw, 44px);
+      background: linear-gradient(180deg, rgba(24, 20, 24, 0.93) 0%, rgba(15, 13, 19, 0.96) 100%);
+      border: 1px solid rgba(245, 194, 123, 0.28);
+      box-shadow: 0 28px 65px rgba(0, 0, 0, 0.72), inset 0 1px 0 rgba(255, 224, 180, 0.08);
+      animation: unfoldLetter 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    @keyframes unfoldLetter {
+      from { opacity: 0; transform: translateY(22px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .letter-greeting {
+      font-family: var(--font-hand);
+      font-size: 2.1rem;
+      color: var(--gold-light);
+      margin: 0 0 18px;
+    }
+
+    .letter-body p {
+      margin: 0 0 15px;
+      font-size: 0.95rem;
+      line-height: 1.85;
+      color: rgba(235, 222, 209, 0.9);
+      font-weight: 300;
+    }
+
+    .letter-body p:first-child {
+      color: #fff6eb;
+      font-weight: 500;
+    }
+
+    .letter-sign {
+      margin-top: 28px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(245, 194, 123, 0.16);
+      text-align: right;
+      font-family: var(--font-hand);
+      font-size: 2rem;
+      color: var(--gold-light);
+    }
+
+    .text-link-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 0.78rem;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+      padding: 6px;
+      transition: color 0.2s ease;
+    }
+
+    .text-link-btn:hover { color: var(--gold-light); }
+
+    /* ==========================================================================
+       SECTION 5: 3D-FLIP POLAROIDS & CINEMA REELS
+       ========================================================================== */
+    .polaroid-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(215px, 1fr));
+      gap: 22px;
+    }
+
+    .polaroid-wrap {
+      perspective: 1100px;
+      cursor: pointer;
+    }
+
+    .polaroid-inner {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 4 / 5;
+      transform-style: preserve-3d;
+      -webkit-transform-style: preserve-3d;
+      transition: transform 0.78s cubic-bezier(0.34, 1.35, 0.64, 1);
+    }
+
+    .polaroid-wrap.is-flipped .polaroid-inner {
+      transform: rotateY(180deg);
+    }
+
+    .polaroid-side {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      border-radius: 12px;
+    }
+
+    .polaroid-front {
+      background: linear-gradient(175deg, #efe7dc 0%, #ded2c2 100%);
+      padding: 11px 11px 48px 11px;
+      box-shadow: 0 20px 42px rgba(0, 0, 0, 0.62);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .polaroid-media-box {
+      position: relative;
+      width: 100%;
+      flex: 1;
+      border-radius: 6px;
+      overflow: hidden;
+      background: #07080f;
+    }
+
+    .polaroid-media-box img,
+    .polaroid-media-box video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .unmute-btn {
+      position: absolute;
+      bottom: 8px;
+      right: 8px;
+      z-index: 5;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(245, 194, 123, 0.45);
+      background: rgba(8, 9, 16, 0.78);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      color: var(--gold-light);
+      font-size: 0.7rem;
+      font-weight: 500;
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+
+    .unmute-btn:hover { background: rgba(18, 20, 32, 0.92); }
+    .unmute-btn:active { transform: scale(0.94); }
+
+    .media-fallback {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      text-align: center;
+      background: linear-gradient(180deg, #0b0d17 0%, #141119 55%, #201413 100%);
+      border: 1px solid rgba(245, 194, 123, 0.16);
+    }
+
+    .media-fallback-star {
+      color: rgba(245, 194, 123, 0.8);
+      font-size: 1.4rem;
+      margin-bottom: 6px;
+    }
+
+    .media-fallback-title {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: 0.95rem;
+      color: var(--text-soft);
+    }
+
+    .media-fallback-sub {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+
+    .polaroid-caption {
+      font-family: var(--font-hand);
+      font-size: 1.3rem;
+      color: #261f1c;
+      text-align: center;
+      margin: 9px 0 0;
+      line-height: 1.05;
+    }
+
+    .polaroid-flip-hint {
+      font-size: 0.66rem;
+      color: #6b5d54;
+      text-align: center;
+      margin-top: 3px;
+    }
+
+    .polaroid-back {
+      transform: rotateY(180deg);
+      background: linear-gradient(160deg, rgba(22, 19, 25, 0.96) 0%, rgba(11, 12, 19, 0.98) 100%);
+      border: 1px solid rgba(245, 194, 123, 0.34);
+      box-shadow: 0 20px 42px rgba(0, 0, 0, 0.68);
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .polaroid-back p {
+      font-family: var(--font-hand);
+      font-size: 1.55rem;
+      line-height: 1.3;
+      color: var(--gold-light);
+      margin: 10px 0;
+    }
+
+    .cinema-grid {
+      margin-top: 34px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 22px;
+    }
+
+    .cinema-card {
+      border-radius: 20px;
+      padding: 16px;
+    }
+
+    .cinema-frame {
+      position: relative;
+      aspect-ratio: 16 / 9;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #06070d;
+      border: 1px solid rgba(245, 194, 123, 0.16);
+    }
+
+    .cinema-frame video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .cinema-meta {
+      margin-top: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 0 4px;
+    }
+
+    .cinema-meta h3 {
+      margin: 0;
+      font-family: var(--font-serif);
+      font-size: 1.2rem;
+      font-weight: 500;
+      color: #fdf3e7;
+    }
+
+    .cinema-meta span {
+      font-size: 0.68rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(245, 194, 123, 0.72);
+      white-space: nowrap;
+    }
+
+    /* ==========================================================================
+       SECTION 6: GOLDEN SCRATCH-OFF VOUCHERS
+       ========================================================================== */
+    .scratch-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+    }
+
+    .scratch-card {
+      position: relative;
+      border-radius: 18px;
+      overflow: hidden;
+      min-height: 175px;
+      border: 1px solid rgba(245, 194, 123, 0.36);
+      background: linear-gradient(150deg, rgba(24, 19, 25, 0.94) 0%, rgba(12, 13, 20, 0.97) 100%);
+      box-shadow: 0 18px 42px rgba(0, 0, 0, 0.62);
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .scratch-underneath {
+      position: relative;
+      z-index: 1;
+      height: 100%;
+      min-height: 175px;
+      padding: 24px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .scratch-badge {
+      font-size: 0.68rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(245, 194, 123, 0.75);
+      margin-bottom: 10px;
+    }
+
+    .scratch-prize {
+      font-family: var(--font-serif);
+      font-size: 1.4rem;
+      line-height: 1.28;
+      color: #fff5e6;
+      margin: 0;
+    }
+
+    .scratch-from {
+      margin-top: 10px;
+      font-family: var(--font-hand);
+      font-size: 1.15rem;
+      color: var(--gold-light);
+    }
+
+    .scratch-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 3;
+      touch-action: none;
+      cursor: crosshair;
+      transition: opacity 0.6s ease;
+    }
+
+    .scratch-canvas.is-revealed {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .scratch-helper-wrap {
+      margin-top: 24px;
+      text-align: center;
+    }
+
+    /* ==========================================================================
+       SECTION 7: BIRTHDAY CAKE & FLOATING SKY WISH LANTERN
+       ========================================================================== */
+    .wish-box {
+      border-radius: var(--radius-lg);
+      padding: clamp(26px, 5vw, 46px);
+      text-align: center;
+    }
+
+    .cake-stage {
+      margin: 46px 0 26px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      user-select: none;
+    }
+
+    .candles-row {
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      gap: 24px;
+      margin-bottom: -2px;
+      z-index: 12;
+    }
+
+    .candle-btn {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      width: 34px;
+      height: 82px;
+      padding: 0;
+      border: none;
+      background: transparent;
+    }
+
+    @keyframes amberFlicker {
+      0%, 100% { transform: translateX(-50%) scale(1, 1) rotate(-1.5deg); opacity: 0.96; }
+      30% { transform: translateX(-50%) scale(1.06, 0.95) rotate(2deg); opacity: 1; }
+      60% { transform: translateX(-50%) scale(0.95, 1.07) rotate(-1deg); opacity: 0.92; }
+    }
+
+    .candle-flame {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 17px;
+      height: 28px;
+      border-radius: 50% 50% 50% 50% / 68% 68% 32% 32%;
+      background: radial-gradient(ellipse at 50% 76%, #fffdf7 0%, #ffe6b3 34%, #f4a261 74%, rgba(181, 101, 61, 0.15) 100%);
+      box-shadow: 0 0 16px rgba(255, 214, 153, 0.95), 0 0 34px rgba(244, 162, 97, 0.65);
+      transform-origin: bottom center;
+      animation: amberFlicker 1.05s ease-in-out infinite;
+      transition: opacity 0.35s ease, transform 0.35s ease;
+    }
+
+    .candle-btn.is-out .candle-flame {
+      opacity: 0;
+      transform: translateX(-50%) scale(0.12);
+      animation: none;
+    }
+
+    .candle-wick {
+      width: 2px;
+      height: 8px;
+      background: var(--text-muted);
+      border-radius: 2px;
+    }
+
+    .candle-stick {
+      width: 12px;
+      height: 48px;
+      border-radius: 3px 3px 0 0;
+      background: linear-gradient(180deg, #f7dfb9 0%, #d49a56 55%, #9b5d33 100%);
+      border: 1px solid rgba(245, 194, 123, 0.35);
+      box-shadow: 0 0 14px rgba(212, 154, 86, 0.25);
+    }
+
+    @keyframes wispSmoke {
+      0% { opacity: 0.7; transform: translate(-50%, 0) scale(0.5); }
+      100% { opacity: 0; transform: translate(-28%, -44px) scale(2.2); }
+    }
+
+    .smoke-wisp {
+      position: absolute;
+      top: 12px;
+      left: 50%;
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: rgba(230, 213, 195, 0.45);
+      filter: blur(4px);
+      pointer-events: none;
+      animation: wispSmoke 1.5s ease-out forwards;
+    }
+
+    .cake-tier-top {
+      position: relative;
+      width: 185px;
+      height: 52px;
+      border-radius: 12px 12px 0 0;
+      background: linear-gradient(180deg, #1f191d 0%, #131015 100%);
+      border-top: 1px solid rgba(245, 194, 123, 0.38);
+      border-inline: 1px solid rgba(245, 194, 123, 0.32);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      font-size: 0.65rem;
+      color: rgba(245, 194, 123, 0.55);
+    }
+
+    .cake-tier-bottom {
+      position: relative;
+      width: 256px;
+      height: 76px;
+      border-radius: 10px 10px 6px 6px;
+      background: linear-gradient(180deg, #181318 0%, #0d0a10 100%);
+      border: 1px solid rgba(245, 194, 123, 0.32);
+      box-shadow: 0 18px 36px rgba(0, 0, 0, 0.65);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-hand);
+      font-size: 1.65rem;
+      color: var(--gold-light);
+    }
+
+    .cake-plate {
+      width: 292px;
+      height: 8px;
+      margin-top: 3px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, transparent, rgba(245, 194, 123, 0.55), transparent);
+    }
+
+    .divider-gold {
+      width: 96px;
+      height: 1px;
+      margin: 30px auto;
+      background: linear-gradient(90deg, transparent, rgba(245, 194, 123, 0.38), transparent);
+    }
+
+    .wish-form {
+      margin: 20px auto 0;
+      max-width: 470px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .wish-input {
+      flex: 1 1 220px;
+      border-radius: 999px;
+      padding: 12px 18px;
+      background: rgba(8, 9, 16, 0.85);
+      border: 1px solid rgba(245, 194, 123, 0.28);
+      color: #fdf3e7;
+      font-size: 0.88rem;
+      outline: none;
+    }
+
+    .wish-input:focus { border-color: rgba(245, 194, 123, 0.65); }
+
+    @keyframes lanternAscend {
+      0% { transform: translate(-50%, 0) scale(0.85) rotate(-2deg); opacity: 0; }
+      10% { opacity: 1; }
+      55% { transform: translate(-45%, -48vh) scale(0.95) rotate(2.5deg); opacity: 1; }
+      100% { transform: translate(-53%, -108vh) scale(0.45) rotate(-2deg); opacity: 0; }
+    }
+
+    .sky-lantern {
+      position: fixed;
+      bottom: 7vh;
+      left: 50%;
+      z-index: 75;
+      pointer-events: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      animation: lanternAscend 9s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+    }
+
+    .lantern-body {
+      width: 62px;
+      height: 78px;
+      border-radius: 26px 26px 12px 12px;
+      background: linear-gradient(180deg, #ffe5b8 0%, #f4a261 55%, #b5653d 100%);
+      border: 1px solid rgba(245, 194, 123, 0.65);
+      box-shadow: 0 0 38px rgba(244, 162, 97, 0.85);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .lantern-core {
+      width: 22px;
+      height: 26px;
+      border-radius: 50%;
+      background: rgba(255, 248, 235, 0.92);
+      filter: blur(2px);
+      margin-top: 14px;
+    }
+
+    .lantern-tag {
+      margin-top: 8px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      background: rgba(9, 10, 17, 0.88);
+      border: 1px solid rgba(245, 194, 123, 0.38);
+      color: var(--gold-light);
+      font-size: 0.72rem;
+      max-width: 220px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* ==========================================================================
+       SECTION 8: FLOATING "NEED A LITTLE LIGHT?" BUTTON & TOAST
+       ========================================================================== */
+    .comfort-wrap {
+      position: fixed;
+      bottom: max(18px, env(safe-area-inset-bottom));
+      right: 16px;
+      z-index: 60;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 10px;
+      max-width: calc(100vw - 32px);
+    }
+
+    .comfort-toast {
+      border-radius: 18px;
+      padding: 13px 16px;
+      max-width: 310px;
+      border-color: rgba(245, 194, 123, 0.38);
+      opacity: 0;
+      transform: translateY(10px) scale(0.97);
+      pointer-events: none;
+      transition: opacity 0.35s ease, transform 0.35s ease;
+    }
+
+    .comfort-toast.is-visible {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
+    }
+
+    .comfort-toast p {
+      margin: 0;
+      font-size: 0.84rem;
+      line-height: 1.5;
+      color: #fdf3e7;
+    }
+
+    .comfort-toast-sign {
+      margin-top: 6px !important;
+      font-size: 0.66rem !important;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgba(245, 194, 123, 0.74) !important;
+    }
+
+    .comfort-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 10px 16px;
+      border-radius: 999px;
+      color: #fdf3e7;
+      font-size: 0.82rem;
+      font-weight: 500;
+      border-color: rgba(245, 194, 123, 0.38);
+      box-shadow: 0 0 24px rgba(212, 154, 86, 0.22);
+    }
+
+    .comfort-btn:active { transform: scale(0.96); }
+
+    /* ==========================================================================
+       SHARED SMOKED-GLASS MODAL
+       ========================================================================== */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 80;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      background: rgba(5, 6, 11, 0.8);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.28s ease;
+    }
+
+    .modal-overlay.is-open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-card {
+      position: relative;
+      width: 100%;
+      max-width: 440px;
+      border-radius: 24px;
+      padding: 28px 26px 24px;
+      border-color: rgba(245, 194, 123, 0.36);
+      transform: translateY(14px) scale(0.97);
+      transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .modal-overlay.is-open .modal-card {
+      transform: translateY(0) scale(1);
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: 1px solid rgba(245, 194, 123, 0.22);
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-soft);
+      font-size: 0.9rem;
+    }
+
+    .modal-close:hover { background: rgba(255, 255, 255, 0.14); }
+
+    .modal-tag {
+      display: inline-flex;
+      padding: 4px 12px;
+      border-radius: 999px;
+      background: rgba(245, 194, 123, 0.12);
+      border: 1px solid rgba(245, 194, 123, 0.28);
+      color: var(--gold-light);
+      font-size: 0.68rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+
+    .modal-heading {
+      margin: 0;
+      font-family: var(--font-serif);
+      font-size: 1.68rem;
+      font-weight: 500;
+      line-height: 1.24;
+      color: #fff6eb;
+    }
+
+    .modal-body {
+      margin: 14px 0 0;
+      font-size: 0.94rem;
+      line-height: 1.7;
+      color: rgba(235, 222, 209, 0.9);
+      font-weight: 300;
+    }
+
+    .modal-footer {
+      margin-top: 24px;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    footer {
+      padding: 20px 18px 92px;
+      text-align: center;
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: 1.05rem;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Full-Screen Milky Way & Shooting Stars Canvas -->
+  <canvas id="sky-canvas" aria-hidden="true"></canvas>
+
+  <!-- Fixed Cinematic Horizon Layer -->
+  <div class="horizon-layer" aria-hidden="true">
+    <div class="horizon-amber-glow"></div>
+    <div class="cloud-band-1"></div>
+    <div class="cloud-band-2"></div>
+
+    <!-- Layered Mountain Silhouettes with Tiny Twinkling Valley Lights -->
+    <svg class="horizon-mountains" viewBox="0 0 1440 220" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,165 L120,140 L250,155 L410,122 L560,148 L720,118 L890,145 L1060,115 L1220,142 L1350,124 L1440,140 L1440,220 L0,220 Z" fill="#130f12" opacity="0.82" />
+      <path d="M0,180 L180,156 L340,172 L510,148 L670,176 L840,146 L1010,170 L1180,144 L1320,166 L1440,152 L1440,220 L0,220 Z" fill="#0b090c" opacity="0.92" />
+      <path d="M0,196 L240,180 L480,194 L760,178 L1040,195 L1280,182 L1440,192 L1440,220 L0,220 Z" fill="#050508" />
+      <g fill="#f5c27b">
+        <circle class="town-light" style="--tw-dur:3.2s;--tw-delay:0.2s" cx="318" cy="192" r="1.4" />
+        <circle class="town-light" style="--tw-dur:4.1s;--tw-delay:1.1s" cx="329" cy="194" r="1.1" />
+        <circle class="town-light" style="--tw-dur:2.9s;--tw-delay:0.5s" cx="342" cy="191" r="1.2" />
+        <circle class="town-light" style="--tw-dur:3.8s;--tw-delay:1.7s" cx="562" cy="196" r="1.3" />
+        <circle class="town-light" style="--tw-dur:4.4s;--tw-delay:0.8s" cx="574" cy="198" r="1.0" />
+        <circle class="town-light" style="--tw-dur:3.4s;--tw-delay:2.0s" cx="585" cy="195" r="1.4" />
+        <circle class="town-light" style="--tw-dur:3.9s;--tw-delay:0.4s" cx="732" cy="187" r="1.2" />
+        <circle class="town-light" style="--tw-dur:2.8s;--tw-delay:1.3s" cx="746" cy="189" r="1.5" />
+        <circle class="town-light" style="--tw-dur:4.2s;--tw-delay:0.9s" cx="758" cy="188" r="1.1" />
+        <circle class="town-light" style="--tw-dur:3.5s;--tw-delay:1.9s" cx="982" cy="198" r="1.3" />
+        <circle class="town-light" style="--tw-dur:4.0s;--tw-delay:0.3s" cx="998" cy="196" r="1.1" />
+        <circle class="town-light" style="--tw-dur:3.1s;--tw-delay:1.5s" cx="1148" cy="192" r="1.4" />
+      </g>
+    </svg>
+
+    <!-- Bottom-Left Tree Foliage Silhouette -->
+    <svg class="horizon-foliage" viewBox="0 0 280 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M-8 262 C 12 220, 26 184, 52 152 C 74 126, 108 110, 146 96 C 110 118, 82 142, 64 172 C 92 160, 124 152, 166 150 C 122 164, 88 180, 62 206 C 96 202, 134 204, 178 214 C 124 218, 84 232, 54 262 Z" fill="#040407" />
+      <g fill="#040407">
+        <ellipse cx="42" cy="148" rx="18" ry="8" transform="rotate(-32 42 148)" />
+        <ellipse cx="70" cy="126" rx="20" ry="9" transform="rotate(-24 70 126)" />
+        <ellipse cx="102" cy="108" rx="17" ry="7" transform="rotate(-18 102 108)" />
+        <ellipse cx="132" cy="96" rx="14" ry="6" transform="rotate(-12 132 96)" />
+        <ellipse cx="32" cy="182" rx="22" ry="9" transform="rotate(-18 32 182)" />
+        <ellipse cx="94" cy="158" rx="19" ry="8" transform="rotate(-10 94 158)" />
+        <ellipse cx="134" cy="150" rx="16" ry="7" transform="rotate(-4 134 150)" />
+        <ellipse cx="114" cy="198" rx="21" ry="8" transform="rotate(6 114 198)" />
+        <ellipse cx="152" cy="208" rx="17" ry="7" transform="rotate(10 152 208)" />
+        <ellipse cx="22" cy="116" rx="16" ry="7" transform="rotate(-44 22 116)" />
+        <ellipse cx="52" cy="98" rx="14" ry="6" transform="rotate(-36 52 98)" />
+        <ellipse cx="16" cy="222" rx="28" ry="14" transform="rotate(-14 16 222)" />
+      </g>
+    </svg>
+  </div>
+
+  <!-- Foreground Celebration & Ember Particle Canvas -->
+  <canvas id="fx-canvas" aria-hidden="true"></canvas>
+
+  <!-- Optional Gentle Web Audio Chimes Toggle -->
+  <div class="chimes-wrap">
+    <button id="sound-toggle" type="button" class="chimes-btn" aria-pressed="false">
+      <span id="sound-icon" aria-hidden="true">🔇</span>
+      <span id="sound-text">Chimes: Off</span>
+    </button>
+  </div>
+
+  <main>
+    <!-- ======================================================================
+         SECTION 1: HERO & INTERACTIVE 10-STAR CONSTELLATION SKY
+         ====================================================================== -->
+    <section id="hero-sky" class="hero-section">
+      <header class="hero-header">
+        <p class="eyebrow">For Kaviya</p>
+        <h1 class="hero-title">A Quiet Sky for Your Birthday</h1>
+        <p class="section-subtitle">
+          Even when we don't talk much, you still deserve a sky full of light.
+        </p>
+
+        <div class="hint-pill">
+          <span>✦ Tap a star below — or tap anywhere in the sky for a shooting star</span>
+        </div>
+
+        <div>
+          <div class="smoked-glass progress-pill">
+            <span class="progress-dot"></span>
+            <span><strong id="stars-lit-count" style="color:var(--gold-light)">0</strong> / 10 Stars Lit</span>
+          </div>
+        </div>
+      </header>
+
+      <div id="constellation-arena" class="constellation-arena" aria-label="Interactive 10-star constellation sky">
+        <svg id="constellation-svg" viewBox="0 0 100 100" preserveAspectRatio="none"></svg>
+      </div>
+
+      <div id="constellation-complete" class="smoked-glass complete-banner hidden">
+        <p>Every star is lit — the whole sky is yours tonight, Kaviya. Scroll down for more. ✦</p>
+      </div>
+
+      <a href="#open-when" class="scroll-cue">
+        <span>Scroll into the night</span>
+        <span class="scroll-arrow">↓</span>
+      </a>
+    </section>
+
+    <!-- ======================================================================
+         SECTION 2: "OPEN WHEN..." SMOKED-GLASS CARDS (6 CARDS)
+         ====================================================================== -->
+    <section id="open-when" class="section-wrap">
+      <div class="section-header">
+        <p class="eyebrow">Keep These For Later</p>
+        <h2 class="section-title">Open When...</h2>
+        <div class="hint-pill"><span>✦ Tap a card to open</span></div>
+      </div>
+
+      <div id="open-when-grid" class="open-when-grid"></div>
+    </section>
+
+    <!-- ======================================================================
+         SECTION 3: "LET IT GO TO THE STARS" (WORRY BURNER)
+         ====================================================================== -->
+    <section id="worry-burner" class="section-wrap section-wrap-narrow">
+      <div class="smoked-glass worry-card">
+        <p class="eyebrow">Leave The Weight Here</p>
+        <h2 class="section-title">Let It Go to the Stars</h2>
+        <p class="section-subtitle">
+          Type anything stressing you out or weighing on your mind tonight. Release it to the sky and watch it dissolve into starlight.
+        </p>
+
+        <div class="worry-input-wrap">
+          <textarea
+            id="worry-textarea"
+            class="worry-textarea"
+            maxlength="400"
+            placeholder="Write whatever feels heavy right now... (it isn't saved anywhere)"
+          ></textarea>
+        </div>
+
+        <div class="worry-actions">
+          <button id="release-worry-btn" type="button" class="btn-gold">
+            Release to the Sky ✦
+          </button>
+        </div>
+
+        <p id="worry-feedback" class="worry-feedback" aria-live="polite"></p>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         SECTION 4: WAX-SEALED BIRTHDAY LETTER (SIGNED BY NIRANJAN)
+         ====================================================================== -->
+    <section id="birthday-letter" class="section-wrap section-wrap-narrow">
+      <div class="section-header">
+        <p class="eyebrow">No Pressure, Just Honesty</p>
+        <h2 class="section-title">A Letter From Niranjan</h2>
+        <div id="envelope-hint" class="hint-pill"><span>✦ Tap the seal to open your letter</span></div>
+      </div>
+
+      <div id="envelope-trigger" class="envelope-container" role="button" tabindex="0" aria-expanded="false" aria-label="Tap the seal to open your birthday letter">
+        <div class="envelope-base">
+          <div class="envelope-fold-left"></div>
+          <div class="envelope-fold-right"></div>
+          <div class="envelope-fold-bottom"></div>
+          <div class="envelope-flap"></div>
+          <div class="wax-seal-btn"><span>K</span></div>
+          <div class="envelope-label">For Kaviya</div>
+        </div>
+      </div>
+
+      <div id="letter-panel" class="hidden">
+        <article class="letter-parchment">
+          <p class="letter-greeting">Dear Kaviya,</p>
+
+          <div class="letter-body">
+            <p>Happy Birthday.</p>
+            <p>
+              I know we’ve been fighting for a long time and we don’t really talk much anymore. I didn’t make this to pressure you or ask for anything—I just know you haven’t been okay lately, and I wanted to leave a quiet little piece of light for you today, hoping it makes things feel even slightly better.
+            </p>
+            <p>
+              No matter how messy things got between us, you are still one of the very first friends I made in college—the first girl I actually wanted to be friends with. When I think back, it’s always the stupid, unforgettable stuff that hits first: holding your melting ice cream because you’re genuinely the worst ice cream eater alive, fighting like we’re still in first year, calling you Kaviya the Nun, and watching a 0-viewer vlogger still act like she’s filming a documentary.
+            </p>
+            <p>
+              Beyond all the jokes, I’ll never forget how you took care of me like my own mother did. You have this habit of thinking that sacrificing your own happiness is what friendship is supposed to look like—and I really hope this year is the year you stop doing that. You deserve the exact same kindness you give everyone else.
+            </p>
+            <p>
+              You are the strongest woman I have ever seen. I know you’ve lost your way a little right now, and it’s completely okay to feel tired. Just don’t forget the unstoppable badass you were—she’s still in there, and I know you’ll find your way back to her.
+            </p>
+            <p>
+              More than anything, Kaviya, I hope this year brings you peace and brings back your loudest, happiest laugh. Take care of yourself.
+            </p>
+          </div>
+
+          <div class="letter-sign">— Niranjan</div>
+
+          <div style="text-align:center; margin-top:18px;">
+            <button id="fold-letter-btn" type="button" class="text-link-btn">
+              Fold letter back into envelope
+            </button>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         SECTION 5: FILM POLAROIDS & CINEMA REELS
+         ====================================================================== -->
+    <section id="memories-gallery" class="section-wrap">
+      <div class="section-header">
+        <p class="eyebrow">Frames Worth Keeping</p>
+        <h2 class="section-title">Little Moments</h2>
+        <div class="hint-pill"><span>✦ Tap to flip any Polaroid</span></div>
+      </div>
+
+      <div class="polaroid-grid">
+        <!-- Polaroid 1: VIDEO (media/video3.mp4) with tap-to-unmute toggle -->
+        <div class="polaroid-wrap" role="button" tabindex="0" aria-label="Flip Polaroid: Holding your ice cream (again)">
+          <div class="polaroid-inner">
+            <div class="polaroid-side polaroid-front">
+              <div class="polaroid-media-box">
+                <video
+                  id="polaroid-video-1"
+                  src="media/video3.mp4"
+                  autoplay
+                  loop
+                  muted
+                  playsinline
+                ></video>
+                <button id="unmute-p1-btn" type="button" class="unmute-btn" aria-label="Unmute video">
+                  🔇 Unmute
+                </button>
+                <div id="p1-fallback" class="media-fallback hidden">
+                  <span class="media-fallback-star">✦</span>
+                  <span class="media-fallback-title">Video Frame 01</span>
+                  <span class="media-fallback-sub">Add media/video3.mp4 in GitHub</span>
+                </div>
+              </div>
+              <p class="polaroid-caption">Holding your ice cream (again)</p>
+              <span class="polaroid-flip-hint">Tap to flip ↻</span>
+            </div>
+            <div class="polaroid-side polaroid-back">
+              <span style="color:var(--gold-light); font-size:1.2rem;">✦</span>
+              <p>"Still don't know how I became the official ice cream holder, but I'd do it again."</p>
+              <span style="font-size:0.7rem; color:var(--text-muted);">Tap to flip back ↺</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Polaroid 2: photo2.jpg -->
+        <div class="polaroid-wrap" role="button" tabindex="0" aria-label="Flip Polaroid: Kaviya the Nun">
+          <div class="polaroid-inner">
+            <div class="polaroid-side polaroid-front">
+              <div class="polaroid-media-box">
+                <img
+                  src="media/photo2.jpg"
+                  alt="Kaviya the Nun"
+                  onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');"
+                />
+                <div class="media-fallback hidden">
+                  <span class="media-fallback-star">✦</span>
+                  <span class="media-fallback-title">Film Frame 02</span>
+                  <span class="media-fallback-sub">Add media/photo2.jpg in GitHub</span>
+                </div>
+              </div>
+              <p class="polaroid-caption">Kaviya the Nun</p>
+              <span class="polaroid-flip-hint">Tap to flip ↻</span>
+            </div>
+            <div class="polaroid-side polaroid-back">
+              <span style="color:var(--gold-light); font-size:1.2rem;">✦</span>
+              <p>"The most iconic nickname in college history. Still undefeated."</p>
+              <span style="font-size:0.7rem; color:var(--text-muted);">Tap to flip back ↺</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Polaroid 3: photo3.jpg -->
+        <div class="polaroid-wrap" role="button" tabindex="0" aria-label="Flip Polaroid: Our legendary fights">
+          <div class="polaroid-inner">
+            <div class="polaroid-side polaroid-front">
+              <div class="polaroid-media-box">
+                <img
+                  src="media/photo3.jpg"
+                  alt="Our legendary fights"
+                  onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');"
+                />
+                <div class="media-fallback hidden">
+                  <span class="media-fallback-star">✦</span>
+                  <span class="media-fallback-title">Film Frame 03</span>
+                  <span class="media-fallback-sub">Add media/photo3.jpg in GitHub</span>
+                </div>
+              </div>
+              <p class="polaroid-caption">Our legendary fights</p>
+              <span class="polaroid-flip-hint">Tap to flip ↻</span>
+            </div>
+            <div class="polaroid-side polaroid-back">
+              <span style="color:var(--gold-light); font-size:1.2rem;">✦</span>
+              <p>"Two stubborn people who argue like it's first year and still care a lot."</p>
+              <span style="font-size:0.7rem; color:var(--text-muted);">Tap to flip back ↺</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Polaroid 4: photo4.jpg -->
+        <div class="polaroid-wrap" role="button" tabindex="0" aria-label="Flip Polaroid: First college friend">
+          <div class="polaroid-inner">
+            <div class="polaroid-side polaroid-front">
+              <div class="polaroid-media-box">
+                <img
+                  src="media/photo4.jpg"
+                  alt="First college friend"
+                  onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');"
+                />
+                <div class="media-fallback hidden">
+                  <span class="media-fallback-star">✦</span>
+                  <span class="media-fallback-title">Film Frame 04</span>
+                  <span class="media-fallback-sub">Add media/photo4.jpg in GitHub</span>
+                </div>
+              </div>
+              <p class="polaroid-caption">First college friend</p>
+              <span class="polaroid-flip-hint">Tap to flip ↻</span>
+            </div>
+            <div class="polaroid-side polaroid-back">
+              <span style="color:var(--gold-light); font-size:1.2rem;">✦</span>
+              <p>"Day one friend. Always glad our paths crossed."</p>
+              <span style="font-size:0.7rem; color:var(--text-muted);">Tap to flip back ↺</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2 Cinema Video Reels -->
+      <div class="cinema-grid">
+        <div class="smoked-glass cinema-card">
+          <div class="cinema-frame">
+            <video controls playsinline preload="metadata" class="memory-video" data-fallback="vid-fb-1">
+              <source src="media/video1.mp4" type="video/mp4" />
+            </video>
+            <div id="vid-fb-1" class="media-fallback hidden">
+              <span class="media-fallback-star">▶</span>
+              <span class="media-fallback-title">Exclusive Footage: The 0-Viewer Vlogger</span>
+              <span class="media-fallback-sub">Add media/video1.mp4 in GitHub</span>
+            </div>
+          </div>
+          <div class="cinema-meta">
+            <h3>Exclusive Footage: The 0-Viewer Vlogger</h3>
+            <span>Reel 01</span>
+          </div>
+        </div>
+
+        <div class="smoked-glass cinema-card">
+          <div class="cinema-frame">
+            <video controls playsinline preload="metadata" class="memory-video" data-fallback="vid-fb-2">
+              <source src="media/video2.mp4" type="video/mp4" />
+            </video>
+            <div id="vid-fb-2" class="media-fallback hidden">
+              <span class="media-fallback-star">▶</span>
+              <span class="media-fallback-title">A Moment Worth Keeping</span>
+              <span class="media-fallback-sub">Add media/video2.mp4 in GitHub</span>
+            </div>
+          </div>
+          <div class="cinema-meta">
+            <h3>A Moment Worth Keeping</h3>
+            <span>Reel 02</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         SECTION 6: GOLDEN SCRATCH-OFF VOUCHERS (3 CANVAS SCRATCH CARDS)
+         ====================================================================== -->
+    <section id="scratch-vouchers" class="section-wrap">
+      <div class="section-header">
+        <p class="eyebrow">No-Questions-Asked Coupons</p>
+        <h2 class="section-title">Golden Birthday Vouchers</h2>
+        <div class="hint-pill"><span>✦ Scratch with your finger to reveal</span></div>
+      </div>
+
+      <div class="scratch-grid">
+        <div class="scratch-card">
+          <div class="scratch-underneath">
+            <span class="scratch-badge">Voucher 01 · Never Expires</span>
+            <p class="scratch-prize">1 Free Ice Cream Holding Session (No Complaints)</p>
+            <span class="scratch-from">Valid anytime — Niranjan</span>
+          </div>
+          <canvas class="scratch-canvas" data-label="Scratch Here ✦"></canvas>
+        </div>
+
+        <div class="scratch-card">
+          <div class="scratch-underneath">
+            <span class="scratch-badge">Voucher 02 · VIP Access</span>
+            <p class="scratch-prize">1 Guaranteed Viewer &amp; Hypeman for Your Next Vlog</p>
+            <span class="scratch-from">Front row seat — Niranjan</span>
+          </div>
+          <canvas class="scratch-canvas" data-label="Scratch Here ✦"></canvas>
+        </div>
+
+        <div class="scratch-card">
+          <div class="scratch-underneath">
+            <span class="scratch-badge">Voucher 03 · Peace Treaty</span>
+            <p class="scratch-prize">1 Zero-Argument Truce &amp; Coffee/Treat on Niranjan</p>
+            <span class="scratch-from">Whenever you're ready — Niranjan</span>
+          </div>
+          <canvas class="scratch-canvas" data-label="Scratch Here ✦"></canvas>
+        </div>
+      </div>
+
+      <div class="scratch-helper-wrap">
+        <button id="reveal-all-vouchers" type="button" class="btn-ghost">
+          Reveal All Vouchers ✦
+        </button>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         SECTION 7: INTERACTIVE BIRTHDAY CAKE & FLOATING SKY WISH LANTERN
+         ====================================================================== -->
+    <section id="make-a-wish" class="section-wrap section-wrap-narrow">
+      <div class="smoked-glass wish-box">
+        <p class="eyebrow">Before Midnight Fades</p>
+        <h2 class="section-title">Make a Wish</h2>
+        <div id="candle-hint" class="hint-pill"><span>✦ Tap the candle flames to blow them out</span></div>
+
+        <div class="cake-stage">
+          <div class="candles-row">
+            <button type="button" class="candle-btn" aria-label="Blow out candle 1">
+              <span class="candle-flame"></span>
+              <span class="candle-wick"></span>
+              <span class="candle-stick"></span>
+            </button>
+            <button type="button" class="candle-btn" aria-label="Blow out candle 2">
+              <span class="candle-flame"></span>
+              <span class="candle-wick"></span>
+              <span class="candle-stick"></span>
+            </button>
+            <button type="button" class="candle-btn" aria-label="Blow out candle 3">
+              <span class="candle-flame"></span>
+              <span class="candle-wick"></span>
+              <span class="candle-stick"></span>
+            </button>
+          </div>
+
+          <div class="cake-tier-top"><span>✦</span><span>·</span><span>✦</span></div>
+          <div class="cake-tier-bottom">Happy Birthday Kaviya</div>
+          <div class="cake-plate"></div>
+
+          <p id="candle-status-msg" style="margin:14px 0 0; font-size:0.86rem; color:var(--gold-light); min-height:20px;"></p>
+          <button id="relight-candle-btn" type="button" class="text-link-btn hidden">
+            Light the candles again
+          </button>
+        </div>
+
+        <div class="divider-gold"></div>
+
+        <h3 style="margin:0; font-family:var(--font-serif); font-size:1.75rem; font-weight:500; color:#fdf3e7;">
+          Write a Birthday Wish
+        </h3>
+        <p class="section-subtitle" style="margin-top:8px;">
+          Type a quiet wish for your new year and launch a glowing amber lantern into the Milky Way.
+        </p>
+
+        <div class="wish-form">
+          <input id="wish-input" type="text" maxlength="120" class="wish-input" placeholder="Type your birthday wish..." />
+          <button id="send-wish-btn" type="button" class="btn-gold">Launch Lantern ✦</button>
+        </div>
+
+        <p id="wish-sent-feedback" class="hidden" style="margin:16px 0 0; font-family:var(--font-serif); font-style:italic; font-size:1.12rem; color:var(--gold-light);">
+          Your lantern is drifting into the Milky Way. May it find its way back to you. ✦
+        </p>
+      </div>
+    </section>
+
+    <footer>
+      Made quietly for Kaviya, under a sky full of light — Niranjan
+    </footer>
+  </main>
+
+  <!-- ========================================================================
+       SECTION 8: FLOATING "NEED A LITTLE LIGHT?" COMFORT BUTTON
+       ======================================================================== -->
+  <div class="comfort-wrap">
+    <div id="comfort-toast" class="smoked-glass comfort-toast" role="status" aria-live="polite">
+      <p id="comfort-toast-text"></p>
+      <p class="comfort-toast-sign">— Niranjan</p>
+    </div>
+
+    <button id="little-light-btn" type="button" class="smoked-glass smoked-glass-hover comfort-btn">
+      <span style="color:var(--gold-light); font-size:1rem;">✦</span>
+      <span>Need a little light?</span>
+    </button>
+  </div>
+
+  <!-- ========================================================================
+       SHARED SMOKED-GLASS MODAL
+       ======================================================================== -->
+  <div id="note-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-heading">
+    <div class="smoked-glass modal-card">
+      <button id="modal-close" type="button" class="modal-close" aria-label="Close modal">✕</button>
+      <div id="modal-tag" class="modal-tag">✦ Starlight Note</div>
+      <h3 id="modal-heading" class="modal-heading"></h3>
+      <p id="modal-body" class="modal-body"></p>
+      <div class="modal-footer">
+        <button id="modal-dismiss" type="button" class="btn-ghost">Keep this close ✦</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       SELF-CONTAINED JAVASCRIPT ENGINE
+       ======================================================================== -->
+  <script>
+    (function () {
+      'use strict';
+
+      /* ----------------------------------------------------------------------
+         1. OPTIONAL GENTLE WEB AUDIO CHIMES
+         ---------------------------------------------------------------------- */
+      let chimesOn = false;
+      let audioCtx = null;
+
+      const soundToggle = document.getElementById('sound-toggle');
+      const soundIcon = document.getElementById('sound-icon');
+      const soundText = document.getElementById('sound-text');
+
+      function ensureAudio() {
+        try {
+          if (!audioCtx) {
+            const Ctx = window.AudioContext || window.webkitAudioContext;
+            if (Ctx) audioCtx = new Ctx();
+          }
+          if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+        } catch (e) {}
+      }
+
+      function playTone(freq = 587.33, dur = 0.72, delay = 0, vol = 0.06) {
+        if (!chimesOn) return;
+        try {
+          ensureAudio();
+          if (!audioCtx) return;
+          const t = audioCtx.currentTime + delay;
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(freq, t);
+          gain.gain.setValueAtTime(0.0001, t);
+          gain.gain.exponentialRampToValueAtTime(vol, t + 0.025);
+          gain.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(t);
+          osc.stop(t + dur + 0.04);
+        } catch (e) {}
+      }
+
+      function playArpeggio(freqs, gap = 0.085) {
+        freqs.forEach((f, i) => playTone(f, 0.85, i * gap, 0.055));
+      }
+
+      soundToggle.addEventListener('click', () => {
+        chimesOn = !chimesOn;
+        soundToggle.setAttribute('aria-pressed', String(chimesOn));
+        soundIcon.textContent = chimesOn ? '🎵' : '🔇';
+        soundText.textContent = chimesOn ? 'Chimes: On' : 'Chimes: Off';
+        if (chimesOn) {
+          ensureAudio();
+          playArpeggio([440, 554.37, 659.25], 0.07);
+        }
+      });
+
+      /* ----------------------------------------------------------------------
+         2. MILKY WAY SKY, SHOOTING STARS & FOREGROUND SPARK/EMBER ENGINE
+         ---------------------------------------------------------------------- */
+      const skyCanvas = document.getElementById('sky-canvas');
+      const skyCtx = skyCanvas.getContext('2d');
+      const fxCanvas = document.getElementById('fx-canvas');
+      const fxCtx = fxCanvas.getContext('2d');
+
+      const mwBuffer = document.createElement('canvas');
+      const mwCtx = mwBuffer.getContext('2d');
+
+      let vw = window.innerWidth;
+      let vh = window.innerHeight;
+      let bgStars = [];
+      let shootingStars = [];
+      let fxParticles = [];
+
+      function buildMilkyWay() {
+        mwBuffer.width = vw;
+        mwBuffer.height = vh;
+        mwCtx.clearRect(0, 0, vw, vh);
+
+        mwCtx.save();
+        mwCtx.translate(vw * 0.44, vh * 0.44);
+        mwCtx.rotate(-0.46);
+
+        const bands = [
+          { x: 0, y: 0, rx: vw * 0.16, ry: vh * 0.78, color: 'rgba(200, 181, 166, 0.12)' },
+          { x: -18, y: -40, rx: vw * 0.11, ry: vh * 0.65, color: 'rgba(140, 118, 105, 0.15)' },
+          { x: 14, y: 50, rx: vw * 0.09, ry: vh * 0.56, color: 'rgba(230, 213, 195, 0.11)' },
+          { x: -6, y: 10, rx: vw * 0.055, ry: vh * 0.48, color: 'rgba(245, 194, 123, 0.08)' },
+        ];
+
+        bands.forEach((b) => {
+          mwCtx.save();
+          mwCtx.scale(1, b.ry / Math.max(b.rx, 1));
+          const sy = b.y * (b.rx / b.ry);
+          const grad = mwCtx.createRadialGradient(b.x, sy, 0, b.x, sy, b.rx);
+          grad.addColorStop(0, b.color);
+          grad.addColorStop(0.55, b.color.replace(/[\d.]+\)$/, '0.04)'));
+          grad.addColorStop(1, 'rgba(0,0,0,0)');
+          mwCtx.fillStyle = grad;
+          mwCtx.beginPath();
+          mwCtx.arc(b.x, sy, b.rx, 0, Math.PI * 2);
+          mwCtx.fill();
+          mwCtx.restore();
+        });
+
+        for (let i = 0; i < 38; i++) {
+          const py = (Math.random() - 0.5) * vh * 1.2;
+          const px = (Math.random() - 0.5) * (vw * 0.16);
+          const r = Math.random() * (vw * 0.06) + 20;
+          const g = mwCtx.createRadialGradient(px, py, 0, px, py, r);
+          g.addColorStop(0, `rgba(210, 170, 140, ${0.025 + Math.random() * 0.04})`);
+          g.addColorStop(1, 'rgba(0,0,0,0)');
+          mwCtx.fillStyle = g;
+          mwCtx.beginPath();
+          mwCtx.arc(px, py, r, 0, Math.PI * 2);
+          mwCtx.fill();
+        }
+
+        const microCount = Math.min(650, Math.floor((vw * vh) / 1500));
+        for (let i = 0; i < microCount; i++) {
+          const px = (Math.random() + Math.random() - 1) * (vw * 0.14);
+          const py = (Math.random() - 0.5) * vh * 1.3;
+          const r = Math.random() * 0.9 + 0.25;
+          const a = Math.random() * 0.62 + 0.14;
+          mwCtx.fillStyle = `rgba(245, 224, 198, ${a})`;
+          mwCtx.beginPath();
+          mwCtx.arc(px, py, r, 0, Math.PI * 2);
+          mwCtx.fill();
+        }
+
+        mwCtx.restore();
+      }
+
+      function generateStars() {
+        const count = Math.min(240, Math.floor((vw * vh) / 4400));
+        const palette = ['255,250,244', '245,194,123', '212,154,86', '224,232,248'];
+        bgStars = Array.from({ length: count }, () => ({
+          x: Math.random() * vw,
+          y: Math.random() * vh * 0.92,
+          r: Math.random() * 1.3 + 0.35,
+          baseAlpha: Math.random() * 0.65 + 0.22,
+          phase: Math.random() * Math.PI * 2,
+          speed: Math.random() * 0.018 + 0.006,
+          tint: palette[Math.floor(Math.random() * palette.length)],
+        }));
+      }
+
+      function resizeCanvases() {
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        vw = window.innerWidth;
+        vh = window.innerHeight;
+        [skyCanvas, fxCanvas].forEach((c) => {
+          c.width = vw * dpr;
+          c.height = vh * dpr;
+          c.style.width = vw + 'px';
+          c.style.height = vh + 'px';
+          c.getContext('2d').setTransform(dpr, 0, 0, dpr, 0, 0);
+        });
+        buildMilkyWay();
+        generateStars();
+      }
+
+      function spawnShootingStar(originX, originY) {
+        const startX = originX !== undefined ? originX : vw * (0.45 + Math.random() * 0.5);
+        const startY = originY !== undefined ? originY : vh * (0.06 + Math.random() * 0.3);
+        const speed = 10 + Math.random() * 5.2;
+        const angle = (138 + (Math.random() - 0.5) * 16) * (Math.PI / 180);
+        shootingStars.push({
+          x: startX,
+          y: startY,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed,
+          tailLen: 95 + Math.random() * 70,
+          life: 1,
+          decay: 0.015 + Math.random() * 0.008,
+        });
+      }
+
+      function spawnSparks(x, y, count = 24, upwardEmbers = false) {
+        const colors = ['#fff5e4', '#f5c27b', '#d49a56', '#f4a261', '#e6d5c3'];
+        for (let i = 0; i < count; i++) {
+          const angle = Math.random() * Math.PI * 2;
+          const speed = upwardEmbers ? Math.random() * 1.8 + 0.4 : Math.random() * 4.2 + 1.1;
+          fxParticles.push({
+            x: upwardEmbers ? x + (Math.random() - 0.5) * 220 : x,
+            y: upwardEmbers ? y + (Math.random() - 0.5) * 60 : y,
+            vx: upwardEmbers ? (Math.random() - 0.5) * 1.2 : Math.cos(angle) * speed,
+            vy: upwardEmbers ? -(Math.random() * 2.6 + 1.0) : Math.sin(angle) * speed - 0.7,
+            size: Math.random() * 2.6 + 1.1,
+            color: colors[Math.floor(Math.random() * colors.length)],
+            life: 1,
+            decay: upwardEmbers ? Math.random() * 0.009 + 0.006 : Math.random() * 0.018 + 0.014,
+            gravity: upwardEmbers ? -0.018 : 0.035,
+          });
+        }
+      }
+
+      function triggerMeteorShower(count = 8) {
+        for (let i = 0; i < count; i++) {
+          setTimeout(() => spawnShootingStar(), i * 230);
+        }
+        spawnSparks(vw * 0.35, vh * 0.36, 28);
+        spawnSparks(vw * 0.65, vh * 0.36, 28);
+        playArpeggio([440, 554.37, 659.25, 880], 0.09);
+      }
+
+      function animate() {
+        skyCtx.clearRect(0, 0, vw, vh);
+        skyCtx.drawImage(mwBuffer, 0, 0, vw, vh);
+
+        for (let i = 0; i < bgStars.length; i++) {
+          const s = bgStars[i];
+          s.phase += s.speed;
+          const a = Math.max(0.08, Math.min(1, s.baseAlpha + Math.sin(s.phase) * 0.28));
+          skyCtx.beginPath();
+          skyCtx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+          skyCtx.fillStyle = `rgba(${s.tint}, ${a})`;
+          skyCtx.fill();
+        }
+
+        for (let i = shootingStars.length - 1; i >= 0; i--) {
+          const m = shootingStars[i];
+          m.x += m.vx;
+          m.y += m.vy;
+          m.life -= m.decay;
+          if (m.life <= 0) { shootingStars.splice(i, 1); continue; }
+
+          const mag = Math.hypot(m.vx, m.vy) || 1;
+          const tx = m.x - (m.vx / mag) * m.tailLen;
+          const ty = m.y - (m.vy / mag) * m.tailLen;
+          const grad = skyCtx.createLinearGradient(m.x, m.y, tx, ty);
+          grad.addColorStop(0, `rgba(255, 248, 232, ${m.life})`);
+          grad.addColorStop(0.2, `rgba(245, 194, 123, ${m.life * 0.85})`);
+          grad.addColorStop(0.55, `rgba(212, 154, 86, ${m.life * 0.35})`);
+          grad.addColorStop(1, 'rgba(181, 101, 61, 0)');
+
+          skyCtx.beginPath();
+          skyCtx.strokeStyle = grad;
+          skyCtx.lineWidth = 2.1;
+          skyCtx.lineCap = 'round';
+          skyCtx.moveTo(m.x, m.y);
+          skyCtx.lineTo(tx, ty);
+          skyCtx.stroke();
+
+          skyCtx.beginPath();
+          skyCtx.arc(m.x, m.y, 1.9, 0, Math.PI * 2);
+          skyCtx.fillStyle = `rgba(255, 250, 238, ${m.life})`;
+          skyCtx.fill();
+        }
+
+        fxCtx.clearRect(0, 0, vw, vh);
+        for (let i = fxParticles.length - 1; i >= 0; i--) {
+          const p = fxParticles[i];
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vy += p.gravity;
+          p.life -= p.decay;
+          if (p.life <= 0) { fxParticles.splice(i, 1); continue; }
+
+          fxCtx.save();
+          fxCtx.globalAlpha = Math.max(0, p.life);
+          fxCtx.fillStyle = p.color;
+          fxCtx.beginPath();
+          fxCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+          fxCtx.fill();
+          fxCtx.restore();
+        }
+
+        requestAnimationFrame(animate);
+      }
+
+      window.addEventListener('resize', resizeCanvases);
+      resizeCanvases();
+      animate();
+
+      setInterval(() => {
+        if (document.visibilityState === 'visible') spawnShootingStar();
+      }, 5500);
+
+      setTimeout(() => spawnShootingStar(vw * 0.78, vh * 0.16), 900);
+
+      document.addEventListener('click', (e) => {
+        if (e.target.closest('button, a, input, textarea, video, canvas, [role="button"], .modal-card, .letter-parchment')) return;
+        spawnShootingStar(e.clientX, e.clientY);
+        spawnSparks(e.clientX, e.clientY, 10);
+        playTone(783.99, 0.42, 0, 0.04);
+      });
+
+      /* ----------------------------------------------------------------------
+         3. SHARED MODAL CONTROLLER
+         ---------------------------------------------------------------------- */
+      const noteModal = document.getElementById('note-modal');
+      const modalTag = document.getElementById('modal-tag');
+      const modalHeading = document.getElementById('modal-heading');
+      const modalBody = document.getElementById('modal-body');
+
+      function openModal(tag, heading, body) {
+        modalTag.textContent = tag;
+        modalHeading.textContent = heading;
+        modalBody.textContent = body;
+        noteModal.classList.add('is-open');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeModal() {
+        noteModal.classList.remove('is-open');
+        document.body.style.overflow = '';
+      }
+
+      document.getElementById('modal-close').addEventListener('click', closeModal);
+      document.getElementById('modal-dismiss').addEventListener('click', closeModal);
+      noteModal.addEventListener('click', (e) => { if (e.target === noteModal) closeModal(); });
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+
+      /* ----------------------------------------------------------------------
+         4. SECTION 1: 10-STAR CONSTELLATION
+         ---------------------------------------------------------------------- */
+      const starData = [
+        { x: 14, y: 21, h: 'Happy birthday to the first girl I wanted to be friends with.', b: 'From the very beginning of college, you were the one person I genuinely hoped would end up in my corner.' },
+        { x: 34, y: 14, h: 'Happy birthday to the worst ice cream eater.', b: 'Still genuinely baffled by how it melted faster than humanly possible every single time.' },
+        { x: 57, y: 20, h: 'Happy birthday to the vlogger who has 0 viewers.', b: 'Okay, 1 loyal viewer. Never lose that main-character energy.' },
+        { x: 82, y: 17, h: 'Happy birthday to a woman who thinks sacrificing her happiness is friendship.', b: 'A gentle birthday reminder from Niranjan: real friendship never asks you to empty yourself out.' },
+        { x: 22, y: 49, h: 'Happy birthday to the woman who took care of me like my mother did.', b: 'Even when we don’t talk much, I have never forgotten how fiercely and warmly you looked out for me.' },
+        { x: 47, y: 45, h: 'Happy birthday to Kaviya the Nun.', b: 'Hall of fame nickname. Permanent status. No appeals.' },
+        { x: 75, y: 48, h: 'Happy birthday to the girl I still argue with like we\'re in first year.', b: 'Two stubborn people who can argue endlessly and still genuinely root for each other.' },
+        { x: 18, y: 78, h: 'Happy birthday to the strongest woman I know—even on the days she forgets it.', b: 'You’ve carried so much quietly. You are far stronger than the rough patch you’re in right now.' },
+        { x: 51, y: 79, h: 'Happy birthday to someone who deserves the exact same kindness she gives everyone else.', b: 'I hope this year people protect your peace the exact way you protect theirs.' },
+        { x: 83, y: 75, h: 'Happy birthday, Kaviya. I hope this year brings back your loudest, happiest laugh.', b: 'May this new year feel lighter, calmer, and completely yours.' },
+      ];
+
+      const arena = document.getElementById('constellation-arena');
+      const constellationSvg = document.getElementById('constellation-svg');
+      const litCountEl = document.getElementById('stars-lit-count');
+      const completeBanner = document.getElementById('constellation-complete');
+
+      const litOrder = [];
+      const litSet = new Set();
+      let showerDone = false;
+      const scaleNotes = [440, 493.88, 554.37, 659.25, 739.99, 880, 739.99, 659.25, 554.37, 880];
+
+      starData.forEach((s, idx) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'constellation-star';
+        btn.style.left = s.x + '%';
+        btn.style.top = s.y + '%';
+        btn.style.setProperty('--dur', (3.2 + (idx % 4) * 0.5) + 's');
+        btn.style.setProperty('--delay', (idx * 0.25) + 's');
+        btn.setAttribute('aria-label', `Tap star ${idx + 1} of 10`);
+        btn.innerHTML = `<svg viewBox="0 0 24 24" fill="#f5c27b"><path d="M12 1.5l2.2 7.3L21.5 11l-7.3 2.2L12 20.5l-2.2-7.3L2.5 11l7.3-2.2L12 1.5z"/></svg>`;
+
+        btn.addEventListener('click', () => {
+          const r = btn.getBoundingClientRect();
+          spawnSparks(r.left + r.width / 2, r.top + r.height / 2, 22);
+          playTone(scaleNotes[idx], 0.8, 0, 0.065);
+
+          if (!litSet.has(idx)) {
+            litSet.add(idx);
+            btn.classList.add('is-lit');
+            if (litOrder.length > 0) {
+              const prev = starData[litOrder[litOrder.length - 1]];
+              const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+              line.setAttribute('x1', String(prev.x));
+              line.setAttribute('y1', String(prev.y));
+              line.setAttribute('x2', String(s.x));
+              line.setAttribute('y2', String(s.y));
+              line.setAttribute('class', 'constellation-line');
+              constellationSvg.appendChild(line);
+            }
+            litOrder.push(idx);
+            litCountEl.textContent = String(litSet.size);
+          }
+
+          openModal(`✦ Star ${idx + 1} of 10`, s.h, s.b);
+
+          if (litSet.size === starData.length && !showerDone) {
+            showerDone = true;
+            completeBanner.classList.remove('hidden');
+            setTimeout(() => triggerMeteorShower(8), 350);
+          }
+        });
+
+        arena.appendChild(btn);
+      });
+
+      /* ----------------------------------------------------------------------
+         5. SECTION 2: "OPEN WHEN..." CARDS
+         ---------------------------------------------------------------------- */
+      const openWhenData = [
+        {
+          title: 'Open when you forget who you are',
+          body: 'Hey. You are genuinely the strongest woman I have ever seen. You may have lost your way a little lately, and that’s okay—it doesn’t erase who you are. Catch your breath, take your time, and know that I’m rooting for you to get right back to the unstoppable badass you were.',
+        },
+        {
+          title: 'Open when you’re putting everyone else first',
+          body: 'Stop and read this twice: real friendship never asks you to shrink, exhaust yourself, or sacrifice your own happiness. You give so much to everyone around you—you deserve to choose yourself and protect your peace without guilt.',
+        },
+        {
+          title: 'Open when you need a laugh',
+          body: 'Friendly reminder that you are still the proud owner of a 0-viewer vlogging career, the worst ice cream eater in recorded history (requiring a designated ice cream holder), and forever crowned “Kaviya the Nun.”',
+        },
+        {
+          title: 'Open when a day feels too heavy',
+          body: 'You don’t have to pretend you’re okay today. You don’t owe anyone an explanation, a text back, or a forced smile. Drop the weight off your shoulders for tonight and take it one quiet hour at a time.',
+        },
+        {
+          title: 'Open when you wonder if you still matter to me',
+          body: 'Fights and silence don’t erase history. You were one of the first friends I made in college and you looked out for me like my own mother did. Zero pressure, no expectations—just know you will always matter to me.',
+        },
+        {
+          title: 'Open when you’re ready for a fresh start',
+          body: 'Here’s my quiet wish for your new year: gentler mornings, calm nights, people who match your loyalty, and getting every single piece of your spark back.',
+        },
+      ];
+
+      const openWhenGrid = document.getElementById('open-when-grid');
+      openWhenData.forEach((item, idx) => {
+        const card = document.createElement('button');
+        card.type = 'button';
+        card.className = 'smoked-glass smoked-glass-hover open-when-card';
+        card.innerHTML = `
+          <div class="open-when-top">
+            <span class="open-when-num">0${idx + 1}</span>
+            <span class="open-when-status">Tap to open →</span>
+          </div>
+          <h3 class="open-when-title">${item.title}</h3>
+        `;
+        card.addEventListener('click', () => {
+          playArpeggio([440, 554.37], 0.06);
+          const st = card.querySelector('.open-when-status');
+          st.textContent = 'Opened ✦';
+          st.classList.add('opened');
+          openModal('✦ Open When...', item.title, item.body);
+        });
+        openWhenGrid.appendChild(card);
+      });
+
+      /* ----------------------------------------------------------------------
+         6. SECTION 3: "LET IT GO TO THE STARS" WORRY BURNER
+         ---------------------------------------------------------------------- */
+      const worryTextarea = document.getElementById('worry-textarea');
+      const releaseWorryBtn = document.getElementById('release-worry-btn');
+      const worryFeedback = document.getElementById('worry-feedback');
+      const worryReplies = [
+        'It’s gone into the night sky now. You don’t have to carry that tonight. ✦',
+        'Dissolved into starlight. Take a slow breath—you’re doing better than you think. ✦',
+        'The sky has it now. Let your shoulders drop for a moment, Kaviya. ✦',
+      ];
+      let worryIdx = 0;
+
+      releaseWorryBtn.addEventListener('click', () => {
+        const text = worryTextarea.value.trim();
+        const rect = worryTextarea.getBoundingClientRect();
+        const cx = rect.left + rect.width / 2;
+        const cy = rect.top + rect.height / 2;
+
+        worryTextarea.classList.add('is-burning');
+        spawnSparks(cx, cy, 46, true);
+        spawnShootingStar();
+        playArpeggio([523.25, 659.25, 783.99], 0.09);
+
+        worryFeedback.textContent = text
+          ? worryReplies[worryIdx++ % worryReplies.length]
+          : 'Even the quiet, unspoken things—let the night sky hold them for you tonight. ✦';
+        worryFeedback.classList.add('is-visible');
+
+        setTimeout(() => {
+          worryTextarea.value = '';
+          worryTextarea.classList.remove('is-burning');
+        }, 680);
+      });
+
+      /* ----------------------------------------------------------------------
+         7. SECTION 4: WAX-SEALED LETTER
+         ---------------------------------------------------------------------- */
+      const envelopeTrigger = document.getElementById('envelope-trigger');
+      const letterPanel = document.getElementById('letter-panel');
+      const envelopeHint = document.getElementById('envelope-hint');
+
+      function openLetter() {
+        if (envelopeTrigger.classList.contains('is-opened')) return;
+        envelopeTrigger.classList.add('is-opened');
+        envelopeTrigger.setAttribute('aria-expanded', 'true');
+        const r = envelopeTrigger.getBoundingClientRect();
+        spawnSparks(r.left + r.width / 2, r.top + r.height / 2, 26);
+        playArpeggio([392, 493.88, 587.33, 783.99], 0.08);
+        setTimeout(() => {
+          letterPanel.classList.remove('hidden');
+          envelopeHint.innerHTML = '<span>✦ Unsealed — take your time reading</span>';
+          letterPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }, 420);
+      }
+
+      envelopeTrigger.addEventListener('click', openLetter);
+      envelopeTrigger.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openLetter(); }
+      });
+
+      document.getElementById('fold-letter-btn').addEventListener('click', () => {
+        letterPanel.classList.add('hidden');
+        envelopeTrigger.classList.remove('is-opened');
+        envelopeTrigger.setAttribute('aria-expanded', 'false');
+        envelopeHint.innerHTML = '<span>✦ Tap the seal to open your letter</span>';
+        playTone(392, 0.45, 0, 0.05);
+      });
+
+      /* ----------------------------------------------------------------------
+         8. SECTION 5: POLAROIDS (INCLUDING VIDEO 3 UNMUTE) & CINEMA FALLBACKS
+         ---------------------------------------------------------------------- */
+      const p1Video = document.getElementById('polaroid-video-1');
+      const unmuteBtn = document.getElementById('unmute-p1-btn');
+      const p1Fallback = document.getElementById('p1-fallback');
+
+      p1Video.addEventListener('error', () => {
+        p1Video.classList.add('hidden');
+        unmuteBtn.classList.add('hidden');
+        p1Fallback.classList.remove('hidden');
+      });
+
+      unmuteBtn.addEventListener('click', (e) => {
+        e.stopPropagation(); // Don't flip the Polaroid when toggling audio
+        p1Video.muted = !p1Video.muted;
+        if (!p1Video.muted) {
+          p1Video.play().catch(() => {});
+        }
+        unmuteBtn.textContent = p1Video.muted ? '🔇 Unmute' : '🔊 Sound On';
+      });
+
+      document.querySelectorAll('.polaroid-wrap').forEach((wrap) => {
+        const flip = () => {
+          wrap.classList.toggle('is-flipped');
+          playTone(wrap.classList.contains('is-flipped') ? 659.25 : 493.88, 0.42, 0, 0.05);
+        };
+        wrap.addEventListener('click', flip);
+        wrap.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); flip(); }
+        });
+      });
+
+      document.querySelectorAll('.memory-video').forEach((vid) => {
+        const fb = document.getElementById(vid.getAttribute('data-fallback'));
+        const src = vid.querySelector('source');
+        const showFb = () => { if (fb) fb.classList.remove('hidden'); };
+        vid.addEventListener('error', showFb);
+        if (src) src.addEventListener('error', showFb);
+      });
+
+      /* ----------------------------------------------------------------------
+         9. SECTION 6: GOLDEN SCRATCH-OFF VOUCHERS (TOUCH + MOUSE)
+         ---------------------------------------------------------------------- */
+      const scratchCanvases = Array.from(document.querySelectorAll('.scratch-canvas'));
+
+      function initScratchCanvas(canvas) {
+        const card = canvas.parentElement;
+        const rect = card.getBoundingClientRect();
+        const w = Math.max(200, Math.floor(rect.width));
+        const h = Math.max(175, Math.floor(rect.height));
+        canvas.width = w;
+        canvas.height = h;
+
+        const ctx = canvas.getContext('2d');
+        const grad = ctx.createLinearGradient(0, 0, w, h);
+        grad.addColorStop(0, '#c89248');
+        grad.addColorStop(0.35, '#f5d08a');
+        grad.addColorStop(0.65, '#b87c36');
+        grad.addColorStop(1, '#e8bc72');
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, w, h);
+
+        // Subtle shimmer speckles on foil
+        for (let i = 0; i < 90; i++) {
+          ctx.fillStyle = `rgba(255, 248, 230, ${Math.random() * 0.25})`;
+          ctx.fillRect(Math.random() * w, Math.random() * h, 2, 2);
+        }
+
+        ctx.fillStyle = '#3b2109';
+        ctx.font = '600 15px "Plus Jakarta Sans", sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(canvas.dataset.label || 'Scratch Here ✦', w / 2, h / 2);
+
+        let scratching = false;
+        let revealed = false;
+
+        function getPoint(e) {
+          const r = canvas.getBoundingClientRect();
+          const touch = e.touches ? e.touches[0] : e;
+          return {
+            x: ((touch.clientX - r.left) / r.width) * canvas.width,
+            y: ((touch.clientY - r.top) / r.height) * canvas.height,
+            clientX: touch.clientX,
+            clientY: touch.clientY,
+          };
+        }
+
+        function scratchAt(e) {
+          if (!scratching || revealed) return;
+          if (e.cancelable) e.preventDefault();
+          const pt = getPoint(e);
+          ctx.globalCompositeOperation = 'destination-out';
+          ctx.beginPath();
+          ctx.arc(pt.x, pt.y, 24, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        function checkProgress() {
+          if (revealed) return;
+          const pixels = ctx.getImageData(0, 0, w, h).data;
+          let transparent = 0;
+          const step = 16; // Sample every 4th pixel for speed on mobile
+          for (let i = 3; i < pixels.length; i += step) {
+            if (pixels[i] < 128) transparent++;
+          }
+          const ratio = transparent / (pixels.length / step);
+          if (ratio > 0.5) {
+            revealed = true;
+            canvas.classList.add('is-revealed');
+            const r = canvas.getBoundingClientRect();
+            spawnSparks(r.left + r.width / 2, r.top + r.height / 2, 28);
+            playArpeggio([523.25, 659.25, 783.99], 0.07);
+          }
+        }
+
+        canvas.addEventListener('mousedown', (e) => { scratching = true; scratchAt(e); });
+        canvas.addEventListener('mousemove', scratchAt);
+        window.addEventListener('mouseup', () => { if (scratching) { scratching = false; checkProgress(); } });
+
+        canvas.addEventListener('touchstart', (e) => { scratching = true; scratchAt(e); }, { passive: false });
+        canvas.addEventListener('touchmove', scratchAt, { passive: false });
+        canvas.addEventListener('touchend', () => { if (scratching) { scratching = false; checkProgress(); } });
+      }
+
+      scratchCanvases.forEach(initScratchCanvas);
+
+      document.getElementById('reveal-all-vouchers').addEventListener('click', () => {
+        scratchCanvases.forEach((c) => c.classList.add('is-revealed'));
+        spawnSparks(vw / 2, vh / 2, 32);
+        playArpeggio([440, 554.37, 659.25, 880], 0.08);
+      });
+
+      /* ----------------------------------------------------------------------
+         10. SECTION 7: BIRTHDAY CAKE & FLOATING SKY WISH LANTERN
+         ---------------------------------------------------------------------- */
+      const candleBtns = Array.from(document.querySelectorAll('.candle-btn'));
+      const candleHint = document.getElementById('candle-hint');
+      const candleStatus = document.getElementById('candle-status-msg');
+      const relightBtn = document.getElementById('relight-candle-btn');
+
+      candleBtns.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          if (btn.classList.contains('is-out')) return;
+          btn.classList.add('is-out');
+
+          for (let i = 0; i < 2; i++) {
+            setTimeout(() => {
+              const wisp = document.createElement('span');
+              wisp.className = 'smoke-wisp';
+              btn.appendChild(wisp);
+              setTimeout(() => wisp.remove(), 1550);
+            }, i * 180);
+          }
+
+          const r = btn.getBoundingClientRect();
+          spawnSparks(r.left + r.width / 2, r.top + 10, 18);
+          playTone(659.25, 0.5, 0, 0.055);
+
+          if (candleBtns.every((b) => b.classList.contains('is-out'))) {
+            spawnShootingStar();
+            setTimeout(() => spawnShootingStar(), 280);
+            playArpeggio([523.25, 659.25, 783.99, 1046.5], 0.085);
+            candleHint.innerHTML = '<span>✦ Wish made — now launch a lantern into the sky below</span>';
+            candleStatus.textContent = 'May everything you quietly wished for find its way to you. ✦';
+            relightBtn.classList.remove('hidden');
+          }
+        });
+      });
+
+      relightBtn.addEventListener('click', () => {
+        candleBtns.forEach((b) => b.classList.remove('is-out'));
+        candleHint.innerHTML = '<span>✦ Tap the candle flames to blow them out</span>';
+        candleStatus.textContent = '';
+        relightBtn.classList.add('hidden');
+        playTone(587.33, 0.45, 0, 0.05);
+      });
+
+      const wishInput = document.getElementById('wish-input');
+      const sendWishBtn = document.getElementById('send-wish-btn');
+      const wishFeedback = document.getElementById('wish-sent-feedback');
+
+      function launchLantern(text) {
+        const clean = text.trim() || 'Peace, strength, and a brighter year ahead';
+        const safe = clean.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        const lantern = document.createElement('div');
+        lantern.className = 'sky-lantern';
+        lantern.style.left = (40 + Math.random() * 20) + '%';
+        lantern.innerHTML = `
+          <div class="lantern-body"><div class="lantern-core"></div></div>
+          <div class="lantern-tag">✦ ${safe}</div>
+        `;
+        document.body.appendChild(lantern);
+        setTimeout(() => lantern.remove(), 9200);
+      }
+
+      sendWishBtn.addEventListener('click', () => {
+        launchLantern(wishInput.value);
+        spawnShootingStar();
+        playArpeggio([440, 554.37, 659.25, 880], 0.1);
+        wishFeedback.classList.remove('hidden');
+        wishInput.value = '';
+      });
+
+      wishInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') sendWishBtn.click();
+      });
+
+      /* ----------------------------------------------------------------------
+         11. SECTION 8: FLOATING "NEED A LITTLE LIGHT?" COMFORT BUTTON
+         ---------------------------------------------------------------------- */
+      const comfortMessages = [
+        'Reminder: you are the strongest woman I have ever seen.',
+        'Go get some ice cream today — try not to make a mess of it.',
+        'You don’t have to sacrifice your own happiness to be a good friend.',
+        'Your 0-viewer vlogs are still cinema. Don’t let anyone tell you otherwise.',
+        'You’re going to find your way back to the badass you were. I’m sure of it.',
+        'Kaviya the Nun remains undefeated.',
+        'Take a deep breath. You don’t have to carry everything at once.',
+        'Even from a distance, I’m always quietly rooting for your smile.',
+      ];
+
+      let comfortIdx = 0;
+      let toastTimer = null;
+      const comfortToast = document.getElementById('comfort-toast');
+      const comfortToastText = document.getElementById('comfort-toast-text');
+      const lightBtn = document.getElementById('little-light-btn');
+
+      lightBtn.addEventListener('click', () => {
+        const r = lightBtn.getBoundingClientRect();
+        spawnSparks(r.left + r.width / 2, r.top, 18);
+        spawnShootingStar();
+        playTone(659.25 + (comfortIdx % 4) * 60, 0.52, 0, 0.055);
+
+        comfortToastText.textContent = comfortMessages[comfortIdx++ % comfortMessages.length];
+        comfortToast.classList.add('is-visible');
+
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => comfortToast.classList.remove('is-visible'), 5200);
+      });
+    })();
+  </script>
+</body>
+</html>
